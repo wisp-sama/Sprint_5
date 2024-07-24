@@ -1,110 +1,108 @@
-from selenium import webdriver
+import logging
 from selenium.webdriver.common.by import By
 
 class TestEntrance:
 
-    def test_main(self, entrance_input_value, entrance_input_path, main_menu, driver_entrance):
+    def test_main(self, driver, locators_data, input_data):
+        # Нажмите кнопку "Войти в аккаунт" на главной странице
+        login_button = driver.find_element(By.XPATH, locators_data.main_menu_path().get('right_button_entrance'))
+        login_button.click()
+
+        # Небольшая задержка для ожидания результата
+        driver.implicitly_wait(1)
+
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('email_field')).send_keys(
+            input_data.user_data_existing().get('email_field'))
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('password_field')).send_keys(
+            input_data.user_data_existing().get('password_field'))
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('button_form')).click()
+
         try:
-            # Нажмите кнопку "Войти в аккаунт" на главной странице
-            login_button = driver_entrance.find_element(By.XPATH, main_menu.right_button_before)
-            login_button.click()
+            driver.find_element(By.XPATH, locators_data.main_menu_path().get('right_button_order'))
+        except:
+            raise Exception("Тест входа по кнопке «Войти в аккаунт» на главной не пройден.")
+        else:
+            logging.info("Тест входа по кнопке «Войти в аккаунт» на главной пройден.")
 
-            # Небольшая задержка для ожидания результата
-            driver_entrance.implicitly_wait(1)
+        driver.quit()
 
-            driver_entrance.find_element(By.XPATH, entrance_input_path.email_field).send_keys(entrance_input_value.email_field)
-            driver_entrance.find_element(By.XPATH, entrance_input_path.password_field).send_keys(entrance_input_value.password_field)
-            driver_entrance.find_element(By.XPATH, entrance_input_path.button_form).click()
+    def test_cabinet(self, driver, locators_data, input_data):
+        # Нажмите кнопку "Личный Кабинет" на главной странице
+        login_button = driver.find_element(By.XPATH, locators_data.main_menu_path().get('button_cabinet'))
+        login_button.click()
 
-            try:
-                driver_entrance.find_element(By.XPATH, main_menu.right_button_after)
-            except:
-                raise Exception ("Тест входа по кнопке «Войти в аккаунт» на главной не пройден.")
-            else:
-                print("Тест входа по кнопке «Войти в аккаунт» на главной пройден.")
-        finally:
-            driver_entrance.quit()
+        # Небольшая задержка для ожидания результата
+        driver.implicitly_wait(1)
 
-    def test_cabinet(self, entrance_input_value, entrance_input_path, main_menu, driver_entrance):
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('email_field')).send_keys(
+            input_data.user_data_existing().get('email_field'))
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('password_field')).send_keys(
+            input_data.user_data_existing().get('password_field'))
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('button_form')).click()
+
         try:
-            # Нажмите кнопку "Личный Кабинет" на главной странице
-            login_button = driver_entrance.find_element(By.XPATH, main_menu.button_cabinet)
-            login_button.click()
+            driver.find_element(By.XPATH, locators_data.main_menu_path().get('right_button_order'))
+        except:
+            raise Exception("Тест входа по кнопке «Войти в аккаунт» с личного кабинета не пройден.")
 
-            # Небольшая задержка для ожидания результата
-            driver_entrance.implicitly_wait(1)
+        logging.info("Тест входа по кнопке «Войти в аккаунт» с личного кабинета пройден.")
 
-            driver_entrance.find_element(By.XPATH, entrance_input_path.email_field).send_keys(
-                entrance_input_value.email_field)
-            driver_entrance.find_element(By.XPATH, entrance_input_path.password_field).send_keys(
-                entrance_input_value.password_field)
-            driver_entrance.find_element(By.XPATH, entrance_input_path.button_form).click()
+        driver.quit()
 
-            try:
-                driver_entrance.find_element(By.XPATH, main_menu.right_button_after)
-            except:
-                raise Exception("Тест входа по кнопке «Войти в аккаунт» с личного кабинета не пройден.")
-            else:
-                print("Тест входа по кнопке «Войти в аккаунт» с личного кабинета пройден.")
-        finally:
-            driver_entrance.quit()
+    def test_registration(self, driver, locators_data, input_data):
+        # Нажмите кнопку "Личный Кабинет" на главной странице
+        login_button = driver.find_element(By.XPATH, locators_data.main_menu_path().get('button_cabinet'))
+        login_button.click()
 
-    def test_registration(self, entrance_input_value, entrance_input_path, main_menu, driver_entrance):
+        registration_button = driver.find_element(By.XPATH, locators_data.main_menu_path().get('registration'))
+        registration_button.click()
+
+        entrance_button = driver.find_element(By.XPATH, locators_data.main_menu_path().get('entrance_aside_button'))
+        entrance_button.click()
+
+        # Небольшая задержка для ожидания результата
+        driver.implicitly_wait(1)
+
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('email_field')).send_keys(
+            input_data.user_data_existing().get('email_field'))
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('password_field')).send_keys(
+            input_data.user_data_existing().get('password_field'))
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('button_form')).click()
+
         try:
-            # Нажмите кнопку "Личный Кабинет" на главной странице
-            login_button = driver_entrance.find_element(By.XPATH, main_menu.button_cabinet)
-            login_button.click()
+            driver.find_element(By.XPATH, locators_data.main_menu_path().get('right_button_order'))
+        except:
+            raise Exception("Тест входа по кнопке «Войти в аккаунт» из формы регистрации не пройден.")
 
-            registration_button = driver_entrance.find_element(By.XPATH, main_menu.registration)
-            registration_button.click()
+        logging.info("Тест входа по кнопке «Войти в аккаунт» из формы регистрации пройден.")
 
-            entrance_button = driver_entrance.find_element(By.XPATH, main_menu.entrance_aside_button)
-            entrance_button.click()
+        driver.quit()
 
-            # Небольшая задержка для ожидания результата
-            driver_entrance.implicitly_wait(1)
+    def test_recovery(self, driver, locators_data, input_data):
+        # Нажмите кнопку "Личный Кабинет" на главной странице
+        login_button = driver.find_element(By.XPATH, locators_data.main_menu_path().get('button_cabinet'))
+        login_button.click()
 
-            driver_entrance.find_element(By.XPATH, entrance_input_path.email_field).send_keys(
-                entrance_input_value.email_field)
-            driver_entrance.find_element(By.XPATH, entrance_input_path.password_field).send_keys(
-                entrance_input_value.password_field)
-            driver_entrance.find_element(By.XPATH, entrance_input_path.button_form).click()
+        recovery_button = driver.find_element(By.XPATH, locators_data.main_menu_path().get('recovery_button'))
+        recovery_button.click()
 
-            try:
-                driver_entrance.find_element(By.XPATH, main_menu.right_button_after)
-            except:
-                raise Exception("Тест входа по кнопке «Войти в аккаунт» из формы регистрации не пройден.")
-            else:
-                print("Тест входа по кнопке «Войти в аккаунт» из формы регистрации пройден.")
-        finally:
-            driver_entrance.quit()
+        entrance_button = driver.find_element(By.XPATH, locators_data.main_menu_path().get('entrance_aside_button'))
+        entrance_button.click()
 
-    def test_recovery(self, entrance_input_value, entrance_input_path, main_menu, driver_entrance):
+        # Небольшая задержка для ожидания результата
+        driver.implicitly_wait(1)
+
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('email_field')).send_keys(
+            input_data.user_data_existing().get('email_field'))
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('password_field')).send_keys(
+            input_data.user_data_existing().get('password_field'))
+        driver.find_element(By.XPATH, locators_data.entrance_input_path().get('button_form')).click()
+
         try:
-            # Нажмите кнопку "Личный Кабинет" на главной странице
-            login_button = driver_entrance.find_element(By.XPATH, main_menu.button_cabinet)
-            login_button.click()
+            driver.find_element(By.XPATH, locators_data.main_menu_path().get('right_button_order'))
+        except:
+            raise Exception("Тест входа по кнопке «Войти в аккаунт» с формы восстановления не пройден.")
 
-            recovery_button = driver_entrance.find_element(By.XPATH, main_menu.recovery_button)
-            recovery_button.click()
+        logging.info("Тест входа по кнопке «Войти в аккаунт» с формы восстановления пройден.")
 
-            entrance_button = driver_entrance.find_element(By.XPATH, main_menu.entrance_aside_button)
-            entrance_button.click()
-
-            # Небольшая задержка для ожидания результата
-            driver_entrance.implicitly_wait(1)
-
-            driver_entrance.find_element(By.XPATH, entrance_input_path.email_field).send_keys(
-                entrance_input_value.email_field)
-            driver_entrance.find_element(By.XPATH, entrance_input_path.password_field).send_keys(
-                entrance_input_value.password_field)
-            driver_entrance.find_element(By.XPATH, entrance_input_path.button_form).click()
-
-            try:
-                driver_entrance.find_element(By.XPATH, main_menu.right_button_after)
-            except:
-                raise Exception("Тест входа по кнопке «Войти в аккаунт» с формы восстановления не пройден.")
-            else:
-                print("Тест входа по кнопке «Войти в аккаунт» с формы восстановления пройден.")
-        finally:
-            driver_entrance.quit()
+        driver.quit()

@@ -1,74 +1,72 @@
-from selenium import webdriver
+import logging
 from selenium.webdriver.common.by import By
 
 class TestRegistration:
 
-    def test_success(self, registration_input_value, registration_input_path, driver_registration):
+    def test_success(self, driver, locators_data, input_data, email_randomizer):
+        driver.get('https://stellarburgers.nomoreparties.site/register')
+        # Заполняем поле "Имя"
+        name_field = driver.find_element(By.XPATH, locators_data.registration_input_path().get('name_field'))
+        name_field.send_keys(input_data.user_data_new(email_randomizer).get('name_field'))
+
+        # Заполняем поле "Email"
+        email_field = driver.find_element(By.XPATH, locators_data.registration_input_path().get('email_field'))
+        email_field.send_keys(input_data.user_data_new(email_randomizer).get('email_field'))
+
+        # Заполняем поле "Пароль"
+        password_field = driver.find_element(By.XPATH, locators_data.registration_input_path().get('password_field'))
+        password_field.send_keys(input_data.user_data_new(email_randomizer).get('password_field'))
+
+        # Отправляем форму
+        register_button = driver.find_element(By.XPATH, locators_data.registration_input_path().get('button_form'))
+        register_button.click()
+
+        # Небольшая задержка для ожидания результата
+        driver.implicitly_wait(1)
+
+        # Проверка на уже зарегистрированного пользователя
         try:
-            # Заполняем поле "Имя"
-            name_field = driver_registration.find_element(By.XPATH, registration_input_path.name_field)
-            name_field.send_keys(registration_input_value.name_field)
+            driver.find_element(By.XPATH, locators_data.registration_input_path().get('existing_user_hint'))
+        except:
+            pass
+        else:
+            raise Exception("Пользователь с такими данными уже зарегистрирован")
 
-            # Заполняем поле "Email"
-            email_field = driver_registration.find_element(By.XPATH, registration_input_path.email_field)
-            email_field.send_keys(registration_input_value.email_field)
+        # Проверка успешного сообщения
+        success_message = driver.find_element(By.XPATH, locators_data.main_menu_path().get('enter_button'))
+        assert success_message != "Вход"
 
-            # Заполняем поле "Пароль"
-            password_field = driver_registration.find_element(By.XPATH, registration_input_path.password_field)
-            password_field.send_keys(registration_input_value.password_field)
+        logging.info("Тест успешной регистрации пройден.")
 
-            # Отправляем форму
-            register_button = driver_registration.find_element(By.XPATH, registration_input_path.button_form)
-            register_button.click()
-
-            # Небольшая задержка для ожидания результата
-            driver_registration.implicitly_wait(1)
-
-            # Проверка на уже зарегистрированного пользователя
-            try:
-                driver_registration.find_element(By.XPATH, "//p[text()='Такой пользователь уже существует']")
-            except:
-                pass
-            else:
-                raise Exception ("Пользователь с такими данными уже зарегистрирован")
-
-            # Проверка успешного сообщения
-            success_message = driver_registration.find_element(By.XPATH, "//h2[text()='Вход']")
-            assert success_message != "Вход"
-
-            print("Тест успешной регистрации пройден.")
-        finally:
-            driver_registration.quit()
+        driver.quit()
 
 
 
-    def test_password_too_short(self, registration_input_value, registration_input_path, driver_registration):
-        try:
-            # Заполняем поле "Имя"
-            name_field = driver_registration.find_element(By.XPATH, registration_input_path.name_field)
-            name_field.send_keys(registration_input_value.name_field)
+    def test_password_too_short(self, driver, locators_data, input_data, email_randomizer):
+        driver.get('https://stellarburgers.nomoreparties.site/register')
+        # Заполняем поле "Имя"
+        name_field = driver.find_element(By.XPATH, locators_data.registration_input_path().get('name_field'))
+        name_field.send_keys(input_data.user_data_new(email_randomizer).get('name_field'))
 
-            # Заполняем поле "Email"
-            email_field = driver_registration.find_element(By.XPATH, registration_input_path.email_field)
-            email_field.send_keys(registration_input_value.email_field)
+        # Заполняем поле "Email"
+        email_field = driver.find_element(By.XPATH, locators_data.registration_input_path().get('email_field'))
+        email_field.send_keys(input_data.user_data_new(email_randomizer).get('email_field'))
 
-            # Заполняем поле "Пароль"
-            password_field = driver_registration.find_element(By.XPATH, registration_input_path.password_field)
-            password_field.send_keys(registration_input_value.password_field[0:3])
+        # Заполняем поле "Пароль"
+        password_field = driver.find_element(By.XPATH, locators_data.registration_input_path().get('password_field'))
+        password_field.send_keys(input_data.user_data_new(email_randomizer).get('password_field')[0:3])
 
-            # Отправляем форму
-            register_button = driver_registration.find_element(By.XPATH, registration_input_path.button_form)
-            register_button.click()
+        # Отправляем форму
+        register_button = driver.find_element(By.XPATH, locators_data.registration_input_path().get('button_form'))
+        register_button.click()
 
-            # Небольшая задержка для ожидания результата
-            driver_registration.implicitly_wait(1)
+        # Небольшая задержка для ожидания результата
+        driver.implicitly_wait(1)
 
-            # Проверка сообщения об ошибке
-            error_message = driver_registration.find_element(By.XPATH,
-                                                "//p[text()='Некорректный пароль']")
-            assert error_message is not None, "Сообщение об ошибке не отображается"
+        # Проверка сообщения об ошибке
+        error_message = driver.find_element(By.XPATH, locators_data.registration_input_path().get('wrong_password_hint'))
+        assert error_message is not None, "Сообщение об ошибке не отображается"
 
-            print("Тест ошибки для некорректного пароля пройден.")
+        logging.info("Тест ошибки для некорректного пароля пройден.")
 
-        finally:
-            driver_registration.quit()
+        driver.quit()
