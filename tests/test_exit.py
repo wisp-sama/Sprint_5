@@ -2,6 +2,7 @@ import logging
 from selenium.webdriver.common.by import By
 import time
 
+
 class TestExit:
 
     def test_exit(self, driver, locators_data, input_data):

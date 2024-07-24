@@ -1,6 +1,7 @@
 import logging
 from selenium.webdriver.common.by import By
 
+
 class TestRegistration:
 
     def test_success(self, driver, locators_data, input_data, email_randomizer):
@@ -39,8 +40,6 @@ class TestRegistration:
         logging.info("Тест успешной регистрации пройден.")
 
         driver.quit()
-
-
 
     def test_password_too_short(self, driver, locators_data, input_data, email_randomizer):
         driver.get('https://stellarburgers.nomoreparties.site/register')

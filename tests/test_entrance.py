@@ -1,6 +1,7 @@
 import logging
 from selenium.webdriver.common.by import By
 
+
 class TestEntrance:
 
     def test_main(self, driver, locators_data, input_data):
